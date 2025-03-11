@@ -19,5 +19,17 @@ def gerar_dados(tamanho, min_valor=0, max_valor=None, modo='txt', nome_arquivo='
     
     print(f'Arquivo {nome_arquivo}.{modo} gerado com {tamanho} números únicos no intervalo [{min_valor}, {max_valor}).')
 
-# Exemplo de uso
-gerar_dados(10, min_valor=10, max_valor=1000, modo='txt')  # Gera um arquivo de texto com 10 números únicos no intervalo especificado
+if __name__ == "__main__":
+    while True:
+        tamanho = int(input("Digite o tamanho do conjunto de dados: "))
+        min_valor = int(input("Digite o valor mínimo: "))
+        max_valor = int(input("Digite o valor máximo: "))
+        modo = input("Escolha o modo de saída (txt/bin): ").strip().lower()
+        nome_arquivo = input("Digite o nome do arquivo (sem extensão): ").strip()
+        
+        gerar_dados(tamanho, min_valor, max_valor, modo, nome_arquivo)
+        
+        repetir = input("Deseja gerar outro conjunto de dados? (s/n): ").strip().lower()
+        if repetir != 's':
+            print("Saindo do programa.")
+            break
