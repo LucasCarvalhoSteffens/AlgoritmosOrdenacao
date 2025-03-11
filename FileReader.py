@@ -17,5 +17,4 @@ class FileReader:
 # Exemplo de uso
 file_reader = FileReader("numeros_aleatorios.txt")
 desordenado = file_reader.read_numbers()
-if desordenado:
-    print(desordenado)
+
