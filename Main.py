@@ -12,15 +12,18 @@ if __name__ == "__main__":
         
         print("Escolha o algoritmo de ordenação:")
         print("1 - Bubble Sort")
-        print("2 - Selection Sort")
-        print("3 - Insertion Sort")
+        print("2 - Bubble Sort Melhorado")
+        print("3 - Selection Sort")
+        print("4 - Insertion Sort")
         escolha = input("Digite o número correspondente: ")
         
         if escolha == "1":
             BubbleSort.sort(desordenado)
         elif escolha == "2":
-            SelectionSort.sort(desordenado)
+            BubbleSortMod.sort(desordenado)
         elif escolha == "3":
+            SelectionSort.sort(desordenado)
+        elif escolha == "4":
             InsertionSort.sort(desordenado)
         else:
             print("Opção inválida! Usando Bubble Sort por padrão.")
