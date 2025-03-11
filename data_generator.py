@@ -1,9 +1,10 @@
 import random
 import struct
 
-def gerar_dados(tamanho, modo='txt', nome_arquivo='dados'):
-    min_valor = 0  # Define o mínimo como 0
-    max_valor = tamanho * 10  # Define o máximo como uma casa decimal a mais que o tamanho
+def gerar_dados(tamanho, min_valor=0, max_valor=None, modo='txt', nome_arquivo='dados'):
+    if max_valor is None:
+        max_valor = tamanho * 10  # Define o máximo como uma casa decimal a mais que o tamanho
+    
     numeros = random.sample(range(min_valor, max_valor), tamanho)  # Garante números únicos dentro do intervalo
     
     if modo == 'txt':
@@ -16,7 +17,7 @@ def gerar_dados(tamanho, modo='txt', nome_arquivo='dados'):
     else:
         raise ValueError("Modo inválido! Use 'txt' para texto ou 'bin' para binário.")
     
-    print(f'Arquivo {nome_arquivo}.{modo} gerado com {tamanho} números únicos.')
+    print(f'Arquivo {nome_arquivo}.{modo} gerado com {tamanho} números únicos no intervalo [{min_valor}, {max_valor}).')
 
 # Exemplo de uso
-gerar_dados(10, modo='txt')  # Gera um arquivo de texto com 10 números únicos
+gerar_dados(10, min_valor=10, max_valor=1000, modo='txt')  # Gera um arquivo de texto com 10 números únicos no intervalo especificado
