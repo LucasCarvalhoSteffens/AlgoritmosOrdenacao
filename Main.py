@@ -1,8 +1,14 @@
 from FileReader import FileReader
 from Basicos.Bubble import BubbleSort
-from Avancados.Merge import MergeSort
 #from Basicos.Selection import SelectionSort
 #from Basicos.Insertion import InsertionSortp[p]
+from Avancados.Merge import MergeSort
+#from Avancados.Quick import QuickSort
+#from Avancados.Tim import TimSort
+from OutrosSugeridos.HeapSort import HeapSort
+#from OutrosSugeridos.CountingSort import CountingSort
+#from OutrosSugeridos.RadixSort import RadixSort
+#from OutrosSugeridos.ShellSort import ShellSort
 
 if __name__ == "__main__":
     file_reader = FileReader("numeros_aleatorios.txt")
@@ -19,6 +25,7 @@ if __name__ == "__main__":
         print("5 - Merge Sort")
         print("6 - Quick Sort")
         print("7 - Tim Sort")
+        print("8 - Heap Sort")
         escolha = input("Digite o número correspondente: ")
         
         if escolha == "1":
@@ -31,6 +38,12 @@ if __name__ == "__main__":
             InsertionSort.sort(desordenado)
         elif escolha == "5":
            desordenado = MergeSort.sort(desordenado)
+        elif escolha == "6":
+           desordenado = QuickSort.sort(desordenado)
+        elif escolha == "7":
+           desordenado = TimSort.sort(desordenado)
+        elif escolha == "8":
+           desordenado = HeapSort.sort(desordenado)
         else:
             print("Opção inválida! Usando Bubble Sort por padrão.")
             BubbleSort.sort(desordenado)
