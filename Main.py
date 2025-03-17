@@ -4,7 +4,7 @@ from Basicos.BubbleMod import BubbleSortMod
 from Basicos.Selection import SelectionSort
 from Basicos.Insertion import InsertionSort
 from Avancados.Merge import MergeSort
-#from Avancados.Quick import QuickSort
+from Avancados.Quick import QuickSort
 #from Avancados.Tim import TimSort
 from OutrosSugeridos.HeapSort import HeapSort
 #from OutrosSugeridos.CountingSort import CountingSort
