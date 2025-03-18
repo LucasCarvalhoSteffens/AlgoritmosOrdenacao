@@ -1,35 +1,43 @@
-from FileReader import FileReader
 class HeapSort:
     @staticmethod
-    def heapify(arr, n, i):
-        largest = i  # Inicializa o maior como raiz
+    def heapify(arr, n, i, metrics):
+        """ Função para reorganizar o heap """
+        largest = i  # Inicializa o maior como a raiz
         left = 2 * i + 1  # Filho esquerdo
         right = 2 * i + 2  # Filho direito
 
-        # Verifica se o filho esquerdo é maior que a raiz
-        if left < n and arr[left] > arr[largest]:
-            largest = left
+        # Compara o nó raiz com o filho esquerdo
+        if left < n:
+            metrics['comparacoes'] += 1
+            if arr[left] > arr[largest]:
+                largest = left
 
-        # Verifica se o filho direito é maior que o maior até agora
-        if right < n and arr[right] > arr[largest]:
-            largest = right
+        # Compara o maior nó encontrado com o filho direito
+        if right < n:
+            metrics['comparacoes'] += 1
+            if arr[right] > arr[largest]:
+                largest = right
 
-        # Se o maior não for a raiz, troca e continua heapificando
+        # Se o maior não for a raiz, troca e continua o heapify
         if largest != i:
             arr[i], arr[largest] = arr[largest], arr[i]
-            HeapSort.heapify(arr, n, largest)
+            metrics['trocas'] += 1
+            HeapSort.heapify(arr, n, largest, metrics)
 
     @staticmethod
     def sort(arr):
+        """ Função principal do Heap Sort """
         n = len(arr)
+        metrics = {'comparacoes': 0, 'trocas': 0}
 
-        # Constrói o heap máximo
+        # Constrói o heap (reorganiza o array)
         for i in range(n // 2 - 1, -1, -1):
-            HeapSort.heapify(arr, n, i)
+            HeapSort.heapify(arr, n, i, metrics)
 
-        # Extrai elementos um por um
+        # Extrai elementos um por um do heap
         for i in range(n - 1, 0, -1):
-            arr[i], arr[0] = arr[0], arr[i]  # Troca
-            HeapSort.heapify(arr, i, 0)
-        
-        return arr
+            arr[i], arr[0] = arr[0], arr[i]  # Troca o elemento atual com a raiz
+            metrics['trocas'] += 1
+            HeapSort.heapify(arr, i, 0, metrics)
+
+        return metrics['comparacoes'], metrics['trocas']

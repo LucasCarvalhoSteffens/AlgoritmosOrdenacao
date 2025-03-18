@@ -1,0 +1,6 @@
+2025-03-18 19:45:49,510 - INFO - Algoritmo: BubbleSort, Tamanho: 200, Tempo: 0.003652s, Comparações: 19900, Trocas: 10156
+2025-03-18 19:47:07,573 - INFO - Algoritmo: BubbleSort, Tamanho: 200, Tempo: 0.000000s, Comparações: 19900, Trocas: 10156
+2025-03-18 19:47:55,676 - INFO - Algoritmo: BubbleSort, Tamanho: 200, Tempo: 0.000000s, Comparações: 19900, Trocas: 10156
+2025-03-18 19:48:56,115 - INFO - Algoritmo: BubbleSort, Tamanho: 200, Tempo: 0.000000s, Comparações: 19900, Trocas: 10156
+2025-03-18 19:49:09,029 - INFO - Algoritmo: BubbleSort, Tamanho: 200, Tempo: 0.000000s, Comparações: 19900, Trocas: 10156
+2025-03-18 19:51:48,211 - INFO - Algoritmo: BubbleSort, Tamanho: 200, Tempo: 0.000000s, Comparações: 19900, Trocas: 10156

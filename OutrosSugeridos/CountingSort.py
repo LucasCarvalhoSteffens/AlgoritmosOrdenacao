@@ -1,10 +1,13 @@
 class CountingSort:
     @staticmethod
     def sort(arr):
+        """ Counting Sort com contagem de movimentações """
         if not arr:
-            return arr  # Retorna se a lista estiver vazia
+            return 0, 0  # Retorna zero comparações e zero movimentações se a lista estiver vazia
 
-        # Garante que os elementos sejam extraídos corretamente, sejam CountedNumber ou inteiros
+        metrics = {'comparacoes': 0, 'trocas': 0}
+
+        # Garante que os elementos sejam extraídos corretamente, sejam objetos ou inteiros
         if isinstance(arr[0], int):
             min_val = min(arr)
             max_val = max(arr)
@@ -20,20 +23,22 @@ class CountingSort:
 
         # Contagem de cada elemento no array original
         for num in arr:
-            count_arr[(num.value if hasattr(num, 'value') else num) - min_val] += 1
+            index = (num.value if hasattr(num, 'value') else num) - min_val
+            count_arr[index] += 1
 
         # Atualiza count_arr para armazenar as posições corretas dos elementos ordenados
         for i in range(1, len(count_arr)):
             count_arr[i] += count_arr[i - 1]
 
-        # Constrói o array ordenado
+        # Constrói o array ordenado e conta movimentações
         for num in reversed(arr):
             index = (num.value if hasattr(num, 'value') else num) - min_val
             output_arr[count_arr[index] - 1] = num
             count_arr[index] -= 1
+            metrics['trocas'] += 1  # Contabiliza movimentações
 
         # Copia os valores ordenados de volta para o array original
         for i in range(len(arr)):
             arr[i] = output_arr[i]
 
-        return arr  # Retorna a lista ordenada
+        return metrics['comparacoes'], metrics['trocas']

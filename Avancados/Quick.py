@@ -1,31 +1,36 @@
 class QuickSort:
     @staticmethod
-    def partition(arr, low, high):
-        pivot = arr[high]  # Escolhe o pivô
-        i = low - 1
-        comparisons = 0  # Contador de comparações
-        moves = 0  # Inicializa o contador de movimentações
+    def sort(arr):
+        comparacoes = 0
+        trocas = 0
 
-        for j in range(low, high):
-            comparisons += 1  # Conta comparação
-            if arr[j] <= pivot:
-                i += 1
-                arr[i], arr[j] = arr[j], arr[i]
-                moves += 2  # Conta movimentações
+        def quick_sort(arr, low, high):
+            nonlocal comparacoes, trocas
+            if low < high:
+                pi, comp, troca = partition(arr, low, high)
+                comparacoes += comp
+                trocas += troca
+                quick_sort(arr, low, pi - 1)
+                quick_sort(arr, pi + 1, high)
 
-        arr[i + 1], arr[high] = arr[high], arr[i + 1]
-        moves += 2  # Conta movimentações
+        def partition(arr, low, high):
+            nonlocal comparacoes, trocas
+            pivot = arr[high]
+            i = low - 1
+            local_comparacoes = 0
+            local_trocas = 0
 
-        return i + 1, comparisons, moves  # Retorna índice do pivô e métricas
+            for j in range(low, high):
+                local_comparacoes += 1
+                if arr[j] < pivot:
+                    i += 1
+                    arr[i], arr[j] = arr[j], arr[i]
+                    local_trocas += 1
 
-    @staticmethod
-    def sort(arr, low=0, high=None):
-        if high is None:
-            high = len(arr) - 1
+            arr[i + 1], arr[high] = arr[high], arr[i + 1]
+            local_trocas += 1
 
-        if low < high:
-            pi, comparisons, moves = QuickSort.partition(arr, low, high)  # Captura métricas
-            QuickSort.sort(arr, low, pi - 1)
-            QuickSort.sort(arr, pi + 1, high)
+            return i + 1, local_comparacoes, local_trocas
 
-        return arr
+        quick_sort(arr, 0, len(arr) - 1)
+        return comparacoes, trocas

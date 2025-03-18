@@ -2,11 +2,16 @@ class BubbleSortMod:
     @staticmethod
     def sort(arr):
         n = len(arr)
+        comparacoes = 0
+        trocas = 0
         for i in range(n):
-            trocou = False  # Flag para verificar se houve troca
-            for j in range(n - 1 - i):  # Evita comparar elementos já ordenados
-                if arr[j] > arr[j + 1]:  # Compara elementos adjacentes
-                    arr[j], arr[j + 1] = arr[j + 1], arr[j]  # Troca os elementos
-                    trocou = True  # Marca que houve troca
-            if not trocou:
-                break  # Se não houve troca, a lista já está ordenada
+            trocou = False
+            for j in range(0, n - i - 1):
+                comparacoes += 1
+                if arr[j] > arr[j + 1]:
+                    arr[j], arr[j + 1] = arr[j + 1], arr[j]
+                    trocas += 1
+                    trocou = True
+            if not trocou:  # Se não houve troca, a lista já está ordenada
+                break
+        return comparacoes, trocas  # ✅ Retorna corretamente

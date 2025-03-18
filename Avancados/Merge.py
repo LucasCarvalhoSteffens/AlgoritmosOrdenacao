@@ -1,37 +1,45 @@
 class MergeSort:
     @staticmethod
-    def merge(left, right):
-        sorted_list = []
-        i = j = 0
-
-        # Comparação dos elementos de left e right
-        while i < len(left) and j < len(right):
-            if left[i] <= right[j]:
-                sorted_list.append(left[i])
-                i += 1
-            else:
-                sorted_list.append(right[j])
-                j += 1
-
-        # Adiciona elementos restantes
-        sorted_list.extend(left[i:])
-        sorted_list.extend(right[j:])
-
-        return sorted_list
-
-    @staticmethod
     def sort(arr):
-        if len(arr) <= 1:
-            return arr  # Retorna se a lista já estiver ordenada
+        comparacoes = 0
+        trocas = 0
 
-        mid = len(arr) // 2
-        left_half = MergeSort.sort(arr[:mid])
-        right_half = MergeSort.sort(arr[mid:])
+        def merge(arr, L, R):
+            nonlocal comparacoes, trocas
+            i = j = k = 0
 
-        sorted_arr = MergeSort.merge(left_half, right_half)
+            while i < len(L) and j < len(R):
+                comparacoes += 1  # Comparação entre elementos de L e R
+                if L[i] < R[j]:
+                    arr[k] = L[i]
+                    i += 1
+                else:
+                    arr[k] = R[j]
+                    j += 1
+                k += 1
+                trocas += 1  # Cada inserção conta como troca
 
-        # Copia os elementos ordenados de volta para a lista original (in-place)
-        for i in range(len(arr)):
-            arr[i] = sorted_arr[i]
+            while i < len(L):
+                arr[k] = L[i]
+                i += 1
+                k += 1
+                trocas += 1
 
-        return arr  # Retorna a lista ordenada
+            while j < len(R):
+                arr[k] = R[j]
+                j += 1
+                k += 1
+                trocas += 1
+
+        def merge_sort(arr):
+            if len(arr) > 1:
+                mid = len(arr) // 2
+                L = arr[:mid]
+                R = arr[mid:]
+
+                merge_sort(L)
+                merge_sort(R)
+                merge(arr, L, R)
+
+        merge_sort(arr)
+        return comparacoes, trocas  # Retorna os valores corretos!
