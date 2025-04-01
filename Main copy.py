@@ -1,6 +1,5 @@
 import time
 import logging
-from concurrent.futures import ThreadPoolExecutor
 from opentelemetry import trace
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
@@ -13,18 +12,11 @@ from Basicos.Selection import SelectionSort
 from Basicos.Insertion import InsertionSort
 from Avancados.Merge import MergeSort
 from Avancados.Quick import QuickSort
-
-from Multiprocessing.InsertionMulti import InsertionSortMulti
-from Multiprocessing.bubbleMulti import BubbleSortMulti
-from Multiprocessing.MergeMulti import MergeSortMulti
-from Multiprocessing.QuickMulti import QuickSortMulti
-
 from Avancados.Tim import TimSort
 from OutrosSugeridos.HeapSort import HeapSort
 from OutrosSugeridos.CountingSort import CountingSort
 from OutrosSugeridos.RadixSort import RadixSort
 from OutrosSugeridos.ShellSort import ShellSort
-from concurrent.futures import ProcessPoolExecutor
 
 # 🔹 Configuração do Logger Local
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -38,8 +30,8 @@ tracer = trace.get_tracer(__name__)
 
 # 🔹 Exportador do Jaeger para capturar os traces
 jaeger_exporter = JaegerExporter(
-    agent_host_name="localhost",
-    agent_port=6831,
+    agent_host_name="localhost",  # Host padrão do Jaeger rodando localmente
+    agent_port=6831,  # Porta padrão para recepção de spans
 )
 
 # 🔹 Configurando o Processador de Traces para enviar os dados ao Jaeger
@@ -52,30 +44,35 @@ def medir_tempo(algoritmo, lista):
     lista_copia = lista.copy()
 
     with tracer.start_as_current_span(algoritmo.__name__) as span:
-        inicio = time.perf_counter()
+        inicio = time.perf_counter()  # ⏱️ Captura o tempo inicial
 
-        resultado = algoritmo.sort(lista_copia)
+        resultado = algoritmo.sort(lista_copia)  # Executa o algoritmo de ordenação
 
-        fim = time.perf_counter()
-        tempo_execucao = fim - inicio
+        fim = time.perf_counter()  # ⏱️ Captura o tempo final
+        tempo_execucao = fim - inicio  # Calcula o tempo total
 
+        # 🔹 Ajusta retorno para evitar erros de desempacotamento
         if isinstance(resultado, tuple) and len(resultado) == 2:
             comparacoes, trocas = resultado
         else:
             comparacoes, trocas = 0, 0
 
+        # 🔹 Garante que tempos extremamente curtos sejam tratados corretamente
         if tempo_execucao < 1e-6:
             tempo_execucao = 1e-6
 
+        # 🔹 Adiciona atributos ao OpenTelemetry para análise
         span.set_attribute("algoritmo", algoritmo.__name__)
         span.set_attribute("tamanho_lista", len(lista))
         span.set_attribute("tempo_execucao", tempo_execucao)
         span.set_attribute("comparacoes", comparacoes)
         span.set_attribute("trocas", trocas)
 
+        # 🔹 Logging local para acompanhamento
         log.info(f"Algoritmo: {algoritmo.__name__}, Tamanho: {len(lista)}, Tempo: {tempo_execucao:.6f}s, Comparações: {comparacoes}, Trocas: {trocas}")
 
-    return algoritmo.__name__, tempo_execucao
+    return tempo_execucao
+
 
 if __name__ == "__main__":
     file_reader = FileReader("numeros_aleatorios.txt")
@@ -94,8 +91,7 @@ if __name__ == "__main__":
         print("9 - Counting Sort")
         print("10 - Radix Sort")
         print("11 - Shell Sort")
-        print("12 - Verificar métricas de tempo de execução.")
-        print("13 - Verificar métricas de tempo de execução (em paralelo).")
+        print("12 - Verificar métricas de tempo de execução")
 
         escolha = input("Digite o número correspondente: ")
 
@@ -114,28 +110,11 @@ if __name__ == "__main__":
             "11": ShellSort
         }
 
-        algoritmosMulti = {
-            "1": BubbleSortMulti,
-            "2": BubbleSortMod,
-            "3": SelectionSort,
-            "4": InsertionSortMulti,
-            "5": MergeSortMulti,
-            "6": QuickSortMulti,
-            "7": TimSort,
-            "8": HeapSort,
-            "9": CountingSort,
-            "10": RadixSort,
-            "11": ShellSort
-        }
-
-        # 🔹 Executa o algoritmo escolhido individualmente
+        # 🔹 Executa o algoritmo escolhido
         if escolha in algoritmos:
             medir_tempo(algoritmos[escolha], desordenado)
 
-        elif escolha in algoritmosMulti:
-            medir_tempo(algoritmosMulti[escolha], desordenado)
-
-        
+        # 🔹 Geração de métricas para todos os algoritmos
         elif escolha == "12":
             tempoinicio =  time.perf_counter()
             print("\nMétricas de tempo de execução:")
@@ -143,23 +122,10 @@ if __name__ == "__main__":
                 
                 tempo = medir_tempo(algoritmo, desordenado)
                
-                #print(f"{algoritmo.__name__}: {tempo:.6f} segundos")
+                print(f"{algoritmo.__name__}: {tempo:.6f} segundos")
 
             fim = time.perf_counter()
             print(f"Tempo total: {fim - tempoinicio:.6f} segundos")
-
-
-        elif escolha == "13":
-
-            print("\nMétricas de tempo de execução (em paralelo):")
-            tempoinicio = time.perf_counter()
-            for nome, algoritmosMulti in algoritmosMulti.items():
-            # Using ThreadPoolExecutor for parallel execution
-                # Submit all sorting algorithms to be executed in parallel
-                tempo = medir_tempo(algoritmosMulti, desordenado)
-                
-    
-
-            fim = time.perf_counter()
-            print(f"Tempo total: {fim - tempoinicio:.6f} segundos")
-
+        else:
+            print("Opção inválida! Usando Bubble Sort por padrão.")
+            medir_tempo(BubbleSort, desordenado)
